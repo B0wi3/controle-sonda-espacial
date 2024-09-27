@@ -5,9 +5,9 @@ public class Probe {
     private Coordinates coordinates;
     private Planet planet;
     private char direction;
-    private Long id;
+    private int id;
 
-    public Probe(Coordinates coordinates, Planet planet, char direction, Long id) {
+    public Probe(Coordinates coordinates, Planet planet, char direction, int id) {
         this.coordinates = coordinates;
         this.planet = planet;
         this.direction = direction;
@@ -54,6 +54,40 @@ public class Probe {
         }
     }
 
+    private void turnLeft() {
+        switch(direction) {
+            case 'N':
+                direction = 'W';
+                break;
+            case 'W':
+                direction = 'S';
+                break;
+            case 'S':
+                direction = 'E';
+                break;
+            case 'E':
+                direction = 'N';
+                break;
+        }
+    }
+
+    private void turnRight() {
+        switch(direction) {
+            case 'N':
+                direction = 'E';
+                break;
+            case 'E':
+                direction = 'S';
+                break;
+            case 'S':
+                direction = 'W';
+                break;
+            case 'W':
+                direction = 'N';
+                break;
+        }
+    }
+
     public Coordinates getCoordinates() {
         return coordinates;
     }
@@ -78,11 +112,20 @@ public class Probe {
         this.direction = direction;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Probe " + id +
+                ": coordinates = " + coordinates +
+                ", direction = " + direction +
+                ", planet = " + planet +
+                '.';
     }
 }
