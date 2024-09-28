@@ -1,17 +1,20 @@
 package com.sondas.desafio_elo7.model;
 
+import com.sondas.desafio_elo7.Exception.OutOfPlanetBoundsException;
+
 public class Probe {
 
+    private String name;
     private Coordinates coordinates;
     private Planet planet;
     private char direction;
     private int id;
 
-    public Probe(Coordinates coordinates, Planet planet, char direction, int id) {
-        this.coordinates = coordinates;
-        this.planet = planet;
-        this.direction = direction;
-        this.id = id;
+
+    public Probe(String name) {
+        this.name = name;
+        this.coordinates = new Coordinates(0, 0);
+        this.direction = 'N';
     }
 
     // Move probe
@@ -31,26 +34,35 @@ public class Probe {
         }
     }
 
-    private void moveForward() {
-        Coordinates newCoordinates = new Coordinates(coordinates.getX(), coordinates.getY());
+    public void moveForward() {
+        // Dependendo da direção, ajuste as coordenadas
         switch (direction) {
             case 'N':
-                newCoordinates.setY(coordinates.getY() + 1);
-                break;
-            case 'W':
-                newCoordinates.setX(coordinates.getX() - 1);
+                if (coordinates.getY() + 1 > planet.getHeight()) {
+                    throw new OutOfPlanetBoundsException("The probe tried to leave the planet area!");
+                }
+                coordinates.setY(coordinates.getY() + 1);
                 break;
             case 'S':
-                newCoordinates.setY(coordinates.getY() - 1);
+                if (coordinates.getY() - 1 < 0) {
+                    throw new OutOfPlanetBoundsException("The probe tried to leave the planet area!");
+                }
+                coordinates.setY(coordinates.getY() - 1);
                 break;
             case 'E':
-                newCoordinates.setX(coordinates.getX() + 1);
+                if (coordinates.getX() + 1 > planet.getWidth()) {
+                    throw new OutOfPlanetBoundsException("The probe tried to leave the planet area!");
+                }
+                coordinates.setX(coordinates.getX() + 1);
                 break;
-        }
-        if (planet.isCoordinateValid(newCoordinates)) {
-            coordinates = newCoordinates;
-        } else {
-            System.out.println("Coordinates are outside planet area.");
+            case 'W':
+                if (coordinates.getX() - 1 < 0) {
+                    throw new OutOfPlanetBoundsException("The probe tried to leave the planet area!");
+                }
+                coordinates.setX(coordinates.getX() - 1);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid direction: " + direction);
         }
     }
 
@@ -88,6 +100,14 @@ public class Probe {
         }
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public Coordinates getCoordinates() {
         return coordinates;
     }
@@ -123,7 +143,8 @@ public class Probe {
     @Override
     public String toString() {
         return "Probe " + id +
-                ": coordinates = " + coordinates +
+                ": name = " + name +
+                " coordinates = " + coordinates +
                 ", direction = " + direction +
                 ", planet = " + planet +
                 '.';

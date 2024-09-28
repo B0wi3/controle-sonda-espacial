@@ -2,13 +2,11 @@ package com.sondas.desafio_elo7.model;
 
 public class Planet {
 
-    private int id;
     private String name;
     private int height;
     private int width;
 
-    public Planet(int id, String name, int height, int width) {
-        this.id = id;
+    public Planet(String name, int height, int width) {
         this.name = name;
         this.height = height;
         this.width = width;
@@ -33,14 +31,6 @@ public class Planet {
 
     public void setWidth(int width) {
         this.width = width;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {

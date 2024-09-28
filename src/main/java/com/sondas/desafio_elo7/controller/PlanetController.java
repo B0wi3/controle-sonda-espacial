@@ -2,10 +2,10 @@ package com.sondas.desafio_elo7.controller;
 
 import com.sondas.desafio_elo7.model.Planet;
 import com.sondas.desafio_elo7.service.PlanetService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -13,16 +13,26 @@ import java.util.List;
 @RequestMapping("/planet")
 public class PlanetController {
 
+    @Autowired
     private PlanetService planetService;
 
-    @GetMapping
-    public Planet planet(@PathVariable int id) {
-        return planetService.get(id);
+    @GetMapping("/{name}")
+    public ResponseEntity<Planet> get(@PathVariable String name) {
+        Planet planet = planetService.get(name);
+        if (planet == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(planet);
     }
 
     @GetMapping("/list")
     public List<Planet> list() {
         return planetService.list();
+    }
+
+    @PostMapping
+    public Planet create(@RequestBody Planet planet) {
+        return planetService.create(planet);
     }
 
 }
